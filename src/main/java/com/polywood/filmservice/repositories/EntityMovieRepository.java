@@ -2,16 +2,19 @@ package com.polywood.filmservice.repositories;
 
 
 import com.polywood.filmservice.model.MoviesEntity;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import org.springframework.data.domain.Pageable;
 
 
 @Repository
-public interface EntityMovieRepository extends JpaRepository<MoviesEntity, Integer> {
+public interface EntityMovieRepository extends PagingAndSortingRepository<MoviesEntity, Integer> {
 
-    public List<MoviesEntity> findAll();
-    public MoviesEntity findByImdbId(String imdbId);
+    public Page<MoviesEntity> findAll(Pageable pageable);
+    public MoviesEntity findByMovieid(String movieid);
+
+
 }
 

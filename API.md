@@ -33,7 +33,15 @@ ___
 
 #### Fetching all movies:
 
-    GET /localhost/8080/movies/
+    GET /localhost:8080/movies?page=0&size=10&sort=title
+    
+| Parameter     | Description                               | Optional |
+| -----------   | ----------------------------------------- | -------- |
+| `page`        | Page offset                               |   Yes    |
+| `size`        | Size limit / number of movies to fetch    |   Yes    |
+| `sort`        | Column name for sorting                   |   Yes    |
+
+Sort parameters should be a valid column name from [Movie](#movie) Entity. 
 
 Returns a [Movie](#movie).
 

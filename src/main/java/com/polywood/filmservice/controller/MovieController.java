@@ -2,15 +2,23 @@ package com.polywood.filmservice.controller;
 
 import com.polywood.filmservice.model.MoviesEntity;
 import com.polywood.filmservice.repositories.EntityMovieRepository;
+import com.polywood.filmservice.tools.OffsetBasedPageRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 @RestController
 @CrossOrigin
@@ -19,8 +27,6 @@ public class MovieController {
 
     private static final Pattern imdbPattern = Pattern.compile("Poster\"\\ssrc=\"([^\"]+)"); //IMDB Regex to extract image url
     private final String IMDB_FILM_API = "https://www.imdb.com/title";
-    private final String regex_imdb = "Poster\"\\ssrc=\"([^\"]+)";
-
 
     private EntityMovieRepository anEntityMovieRepository;
 
@@ -29,21 +35,47 @@ public class MovieController {
         this.anEntityMovieRepository = entityMovieRepository;
     }
 
-    @GetMapping("/")
-    public List<MoviesEntity> findAllMovies() {
-        List<MoviesEntity> movies = null;
+    @RequestMapping(value = "", method = GET)
+    @ResponseBody
+    public List<MoviesEntity> findAllMoviesPaged(
+            @RequestParam("page") Optional<Integer> page, @RequestParam("size") Optional<Integer> size, @RequestParam("sort") Optional<String> sort) {
+        Pageable offsetBasedPageRequest =
+                new OffsetBasedPageRequest(
+                    page.orElse(0),
+                    size.orElse(Integer.MAX_VALUE),
+                    Sort.by(sort.orElse("title")));
+
+        Page<MoviesEntity> movies = null;
         try {
-            movies = anEntityMovieRepository.findAll();
+            movies = anEntityMovieRepository.findAll(offsetBasedPageRequest);
         } catch (Exception e) {
 
             ResponseEntity.notFound().build();
         }
-        return movies;
+
+        if(movies == null)
+            ResponseEntity.notFound().build();
+
+        return Objects.requireNonNull(movies).getContent();
+    }
+
+    @GetMapping("/")
+    public List<MoviesEntity> findAllMovies() {
+
+        Page<MoviesEntity> movies = null;
+        try {
+            movies = anEntityMovieRepository.findAll(PageRequest.of(0, 100, Sort.by("title")));
+        } catch (Exception e) {
+
+            ResponseEntity.notFound().build();
+        }
+        return Objects.requireNonNull(movies).getContent();
     }
 
     @GetMapping("/{id}")
     public MoviesEntity getMovieById(@PathVariable(value = "id") String id) {
-        return anEntityMovieRepository.findByImdbId(id);
+
+        return anEntityMovieRepository.findByMovieid(id);
     }
 
     @GetMapping("/image/{id}")
