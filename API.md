@@ -22,7 +22,7 @@ ___
 
 ######
 
-Localhost/8080/ is use there as default API URI. If the API is on a remote host or on a different port don't forget to change it.
+Localhost:8080/ is use there as default API URI. If the API is on a remote host or on a different port don't forget to change it.
 
 
 ___
@@ -41,17 +41,26 @@ ___
 | `size`        | Size limit / number of movies to fetch    |   Yes    |
 | `sort`        | Column name for sorting                   |   Yes    |
 
-Sort parameters should be a valid column name from [Movie](#movie) Entity. 
+Sort parameter should be a valid column name from [Movie](#movie) Entity. 
 
 Returns a [Movie](#movie).
 
 #### Getting a movie by Id :
 
-    GET /localhost/8080/movies/:id
+    GET /localhost:8080/movies/:id
 
 | Attribute   | Description         |
 | ----------- | ------------------- |
 | `id`        | ImdbId              |
+
+#### Getting a movie image by Id :
+
+    GET /localhost:8080/movies/image/:id
+
+| Attribute   | Description         |
+| ----------- | ------------------- |
+| `id`        | ImdbId              |
+
 
 ## Entities
 
