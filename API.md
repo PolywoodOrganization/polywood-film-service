@@ -16,14 +16,6 @@ ___
 
 
 
-###### Errors
-
-
-
-######
-
-Localhost:8080/ is use there as default API URI. If the API is on a remote host or on a different port don't forget to change it.
-
 
 ___
 
@@ -33,7 +25,7 @@ ___
 
 #### Fetching all movies:
 
-    GET /localhost:8080/movies?page=0&size=10&sort=title
+    GET /movies?page=0&size=10&sort=title
     
 | Parameter     | Description                               | Optional |
 | -----------   | ----------------------------------------- | -------- |
@@ -47,7 +39,7 @@ Returns a [Movie](#movie).
 
 #### Getting a movie by Id :
 
-    GET /localhost:8080/movies/:id
+    GET /movies/:id
 
 | Attribute   | Description         |
 | ----------- | ------------------- |
@@ -55,12 +47,21 @@ Returns a [Movie](#movie).
 
 #### Getting a movie image by Id :
 
-    GET /localhost:8080/movies/image/:id
+    GET /movies/image/:id
 
 | Attribute   | Description         |
 | ----------- | ------------------- |
 | `id`        | ImdbId              |
 
+#### Getting a movie casting by Id :
+
+    GET /movies/casting/:id
+
+| Attribute   | Description         |
+| ----------- | ------------------- |
+| `id`        | ImdbId              |
+
+Return list of actors
 
 ## Entities
 
