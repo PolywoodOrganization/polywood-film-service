@@ -12,9 +12,7 @@ import org.springframework.data.domain.Pageable;
 @Repository
 public interface EntityMovieRepository extends PagingAndSortingRepository<MoviesEntity, Integer> {
 
-    public Page<MoviesEntity> findAll(Pageable pageable);
     public MoviesEntity findByMovieid(String movieid);
-
 
 }
 

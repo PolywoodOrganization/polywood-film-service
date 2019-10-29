@@ -1,6 +1,10 @@
 package com.polywood.filmservice.controller;
 
+import com.polywood.filmservice.model.ActorsEntity;
+import com.polywood.filmservice.model.CastingEntity;
 import com.polywood.filmservice.model.MoviesEntity;
+import com.polywood.filmservice.repositories.EntityActorRepository;
+import com.polywood.filmservice.repositories.EntityCastingRepository;
 import com.polywood.filmservice.repositories.EntityMovieRepository;
 import com.polywood.filmservice.tools.OffsetBasedPageRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -29,10 +34,16 @@ public class MovieController {
     private final String IMDB_FILM_API = "https://www.imdb.com/title";
 
     private EntityMovieRepository anEntityMovieRepository;
+    private EntityCastingRepository anEntityCastingRepository;
+    private EntityActorRepository anEntityActorRepository;
 
     @Autowired
-    public MovieController(EntityMovieRepository entityMovieRepository){
+    public MovieController(EntityMovieRepository entityMovieRepository,
+                           EntityCastingRepository entityCastingRepository,
+                           EntityActorRepository entityActorRepository){
         this.anEntityMovieRepository = entityMovieRepository;
+        this.anEntityCastingRepository = entityCastingRepository;
+        this.anEntityActorRepository = entityActorRepository;
     }
 
     @RequestMapping(value = "", method = GET)
@@ -45,6 +56,7 @@ public class MovieController {
                     size.orElse(Integer.MAX_VALUE),
                     Sort.by(sort.orElse("title")));
 
+        System.out.println(offsetBasedPageRequest.toString());
         Page<MoviesEntity> movies = null;
         try {
             movies = anEntityMovieRepository.findAll(offsetBasedPageRequest);
@@ -56,19 +68,6 @@ public class MovieController {
         if(movies == null)
             ResponseEntity.notFound().build();
 
-        return Objects.requireNonNull(movies).getContent();
-    }
-
-    @GetMapping("/")
-    public List<MoviesEntity> findAllMovies() {
-
-        Page<MoviesEntity> movies = null;
-        try {
-            movies = anEntityMovieRepository.findAll(PageRequest.of(0, 100, Sort.by("title")));
-        } catch (Exception e) {
-
-            ResponseEntity.notFound().build();
-        }
         return Objects.requireNonNull(movies).getContent();
     }
 
@@ -88,6 +87,18 @@ public class MovieController {
         Matcher m = imdbPattern.matcher(imdbResult);
 
         return (m.find())? m.group(1):"";
+    }
+
+    @GetMapping("/casting/{id}")
+    public List<ActorsEntity> getMovieCastingById(@PathVariable(value = "id") String id) {
+
+        List<ActorsEntity> actorsEntities = new ArrayList<>();
+        List<CastingEntity> castingEntities = anEntityCastingRepository.findCastingEntitiesByMovieid(id);
+        for (CastingEntity castingEntity : castingEntities) {
+            actorsEntities.add(castingEntity.getActorsByActorid());
+        }
+
+        return actorsEntities;
     }
 
 }
