@@ -35,7 +35,7 @@ ___
 
 Sort parameter should be a valid column name from [Movie](#movie) Entity. 
 
-Returns a [Movie](#movie).
+Returns a list of [Movie](#movie).
 
 #### Getting a movie by Id :
 
@@ -45,6 +45,8 @@ Returns a [Movie](#movie).
 | ----------- | ------------------- |
 | `id`        | ImdbId              |
 
+Returns a [Movie](#movie).
+
 #### Getting a movie image by Id :
 
     GET /movies/image/:id
@@ -52,6 +54,8 @@ Returns a [Movie](#movie).
 | Attribute   | Description         |
 | ----------- | ------------------- |
 | `id`        | ImdbId              |
+
+Returns a String.
 
 #### Getting a movie casting by Id :
 
@@ -61,7 +65,7 @@ Returns a [Movie](#movie).
 | ----------- | ------------------- |
 | `id`        | ImdbId              |
 
-Return list of actors
+Returns a list of [Actor](#actor).
 
 ## Entities
 
@@ -69,16 +73,23 @@ Return list of actors
 
 | Attribute                | Description                                              | Nullable |
 |--------------------------|----------------------------------------------------------|----------|
-| `ImdbId`                 | IMDB Movie ID and primary Key                            | no       |
+| `imdbid`                 | IMDB Movie ID and primary Key                            | no       |
 | `title`                  | Title of the movie                                       | no       |
-| `releaseYear`            | Release Year                                             | no       |
-| `releaseDate`            | Release Date                                             | no       |
+| `releaseyear`            | Release Year                                             | no       |
+| `releasedate`            | Release Date                                             | no       |
 | `genre`                  | Movie genre                                              | no       |
 | `writers`                | List of writers                                          | no       |
 | `actors`                 | List of actors                                           | no       |
 
+#### Actor
 
-
-
-
-> **Note:** Work in progress
+| Attribute              | Description                                              | Nullable |
+|------------------------|----------------------------------------------------------|----------|
+| `actorid` 🔑           | Actor id and primary Key                                 | no       |
+| `name`                 | Name of the actor                                        | no       |
+| `moviecount`           | Number of movies done by Actor                           | no       |
+| `ratingsum`            | Number of rating given by users                          | no       |
+| `normalizedmovierank`  | Actor rank over others                                   | no       |
+| `googlehits`           | Actor number of hits on google search                    | no       |
+| `normalizedgooglerank` | Actor rank on google                                     | yes       |
+| `normalizedrating`     | Actor global rating by users                             | no       |
