@@ -77,9 +77,20 @@ public class MovieController {
         return anEntityMovieRepository.findByMovieid(id);
     }
 
+    @GetMapping("/genre/{genre}")
+    public List<MoviesEntity> getMoviesByGenre(@PathVariable(value = "genre") String genre) {
+
+        return anEntityMovieRepository.findMoviesByGenre(genre);
+    }
+
+    @GetMapping("/director/{director}")
+    public List<MoviesEntity> getMoviesBydirector(@PathVariable(value = "director") String director) {
+
+        return anEntityMovieRepository.findMoviesByDirector(director.replace("+"," "));
+    }
+
     @GetMapping("/image/{id}")
     public String getMovieImageById(@PathVariable(value = "id") String id) {
-
 
         RestTemplate restTemplate = new RestTemplate();
         String imdbResult = restTemplate.getForObject(
