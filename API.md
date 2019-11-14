@@ -67,6 +67,24 @@ Returns a String.
 
 Returns a list of [Actor](#actor).
 
+
+#### Getting movies by genre :
+
+    GET /movies/genre/:genre
+
+| Attribute   | Description         |
+| ----------- | ------------------- |
+| `genre`     | movie genre         |
+
+#### Getting movies by director :
+
+    GET /movies/director/:director
+
+| Attribute   | Description         |
+| ----------- | ------------------- |
+| `director`  | movie director      |
+
+
 ## Entities
 
 #### Movie
