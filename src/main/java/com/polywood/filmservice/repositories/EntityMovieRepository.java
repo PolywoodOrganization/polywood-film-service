@@ -18,6 +18,8 @@ public interface EntityMovieRepository extends PagingAndSortingRepository<Movies
 
     public MoviesEntity findByMovieid(String movieid);
 
+    public Page<MoviesEntity> findAll(Pageable pageable);
+
     @Query(
             value = "SELECT * FROM movies m WHERE m.genre LIKE CONCAT('%',:genre,'%')",
             nativeQuery = true)

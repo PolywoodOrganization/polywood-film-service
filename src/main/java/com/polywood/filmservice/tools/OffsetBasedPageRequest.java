@@ -83,4 +83,12 @@ public class OffsetBasedPageRequest implements Pageable, Serializable {
         return offset > limit;
     }
 
+    @Override
+    public String toString() {
+        return "OffsetBasedPageRequest{" +
+                "limit=" + limit +
+                ", offset=" + offset +
+                ", sort=" + sort +
+                '}';
+    }
 }

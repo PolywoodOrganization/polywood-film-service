@@ -76,6 +76,8 @@ Returns a list of [Actor](#actor).
 | ----------- | ------------------- |
 | `genre`     | movie genre         |
 
+Returns a list of [Movies](#movie).
+
 #### Getting movies by director :
 
     GET /movies/director/:director
@@ -84,6 +86,7 @@ Returns a list of [Actor](#actor).
 | ----------- | ------------------- |
 | `director`  | movie director      |
 
+Returns a list of [Movies](#movie).
 
 ## Entities
 

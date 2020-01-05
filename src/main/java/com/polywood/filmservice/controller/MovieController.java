@@ -50,16 +50,12 @@ public class MovieController {
     @ResponseBody
     public List<MoviesEntity> findAllMoviesPaged(
             @RequestParam("page") Optional<Integer> page, @RequestParam("size") Optional<Integer> size, @RequestParam("sort") Optional<String> sort) {
-        Pageable offsetBasedPageRequest =
-                new OffsetBasedPageRequest(
-                    page.orElse(0),
-                    size.orElse(Integer.MAX_VALUE),
-                    Sort.by(sort.orElse("title")));
+        Pageable pageable =
+                PageRequest.of(page.orElse(0), size.orElse(Integer.MAX_VALUE), Sort.by(sort.orElse("title")));
 
-        System.out.println(offsetBasedPageRequest.toString());
         Page<MoviesEntity> movies = null;
         try {
-            movies = anEntityMovieRepository.findAll(offsetBasedPageRequest);
+            movies = anEntityMovieRepository.findAll(pageable);
         } catch (Exception e) {
 
             ResponseEntity.notFound().build();
