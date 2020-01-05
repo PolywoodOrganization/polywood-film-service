@@ -30,5 +30,10 @@ public interface EntityMovieRepository extends PagingAndSortingRepository<Movies
             nativeQuery = true)
     public List<MoviesEntity> findMoviesByDirector(@Param("director") String director);
 
+    @Query(
+            value = "SELECT * FROM movies m WHERE m.title LIKE CONCAT('%',:title,'%')",
+            nativeQuery = true)
+    public List<MoviesEntity> findMoviesByTitle(@Param("title") String title);
+
 }
 

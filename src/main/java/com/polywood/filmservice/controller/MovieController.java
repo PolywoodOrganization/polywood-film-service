@@ -80,9 +80,15 @@ public class MovieController {
     }
 
     @GetMapping("/director/{director}")
-    public List<MoviesEntity> getMoviesBydirector(@PathVariable(value = "director") String director) {
+    public List<MoviesEntity> getMoviesByDirector(@PathVariable(value = "director") String director) {
 
         return anEntityMovieRepository.findMoviesByDirector(director.replace("+"," "));
+    }
+
+    @GetMapping("/title/{title}")
+    public List<MoviesEntity> getMoviesByTitle(@PathVariable(value = "title") String title) {
+
+        return anEntityMovieRepository.findMoviesByTitle(title.replace("+"," "));
     }
 
     @GetMapping("/image/{id}")
