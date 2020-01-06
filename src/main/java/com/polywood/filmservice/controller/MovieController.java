@@ -74,21 +74,66 @@ public class MovieController {
     }
 
     @GetMapping("/genre/{genre}")
-    public List<MoviesEntity> getMoviesByGenre(@PathVariable(value = "genre") String genre) {
+    public List<MoviesEntity> getMoviesByGenre(@PathVariable(value = "genre") String genre,
+    @RequestParam("page") Optional<Integer> page, @RequestParam("size") Optional<Integer> size, @RequestParam("sort") Optional<String> sort) {
 
-        return anEntityMovieRepository.findMoviesByGenre(genre);
+        Pageable pageable =
+                PageRequest.of(page.orElse(0), size.orElse(Integer.MAX_VALUE), Sort.by(sort.orElse("title")));
+
+        Page<MoviesEntity> movies = null;
+        try {
+            movies = anEntityMovieRepository.findMoviesByGenre(genre, pageable);
+        } catch (Exception e) {
+
+            ResponseEntity.notFound().build();
+        }
+
+        if(movies == null)
+            ResponseEntity.notFound().build();
+
+        return Objects.requireNonNull(movies).getContent();
     }
 
     @GetMapping("/director/{director}")
-    public List<MoviesEntity> getMoviesByDirector(@PathVariable(value = "director") String director) {
+    public List<MoviesEntity> getMoviesByDirector(@PathVariable(value = "director") String director,
+    @RequestParam("page") Optional<Integer> page, @RequestParam("size") Optional<Integer> size, @RequestParam("sort") Optional<String> sort) {
 
-        return anEntityMovieRepository.findMoviesByDirector(director.replace("+"," "));
+        Pageable pageable =
+                PageRequest.of(page.orElse(0), size.orElse(Integer.MAX_VALUE), Sort.by(sort.orElse("title")));
+
+        Page<MoviesEntity> movies = null;
+        try {
+            movies = anEntityMovieRepository.findMoviesByDirector(director.replace("+"," "), pageable);
+        } catch (Exception e) {
+
+            ResponseEntity.notFound().build();
+        }
+
+        if(movies == null)
+            ResponseEntity.notFound().build();
+
+        return Objects.requireNonNull(movies).getContent();
     }
 
     @GetMapping("/title/{title}")
-    public List<MoviesEntity> getMoviesByTitle(@PathVariable(value = "title") String title) {
+    public List<MoviesEntity> getMoviesByTitle(@PathVariable(value = "title") String title,
+    @RequestParam("page") Optional<Integer> page, @RequestParam("size") Optional<Integer> size, @RequestParam("sort") Optional<String> sort) {
 
-        return anEntityMovieRepository.findMoviesByTitle(title.replace("+"," "));
+        Pageable pageable =
+                PageRequest.of(page.orElse(0), size.orElse(Integer.MAX_VALUE), Sort.by(sort.orElse("title")));
+
+        Page<MoviesEntity> movies = null;
+        try {
+            movies = anEntityMovieRepository.findMoviesByTitle(title.replace("+"," "), pageable);
+        } catch (Exception e) {
+
+            ResponseEntity.notFound().build();
+        }
+
+        if(movies == null)
+            ResponseEntity.notFound().build();
+
+        return Objects.requireNonNull(movies).getContent();
     }
 
     @GetMapping("/image/{id}")

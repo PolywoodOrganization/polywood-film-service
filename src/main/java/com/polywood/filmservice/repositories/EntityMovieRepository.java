@@ -16,24 +16,24 @@ import java.util.List;
 @Repository
 public interface EntityMovieRepository extends PagingAndSortingRepository<MoviesEntity, Integer> {
 
-    public MoviesEntity findByMovieid(String movieid);
+    MoviesEntity findByMovieid(String movieid);
 
-    public Page<MoviesEntity> findAll(Pageable pageable);
+    Page<MoviesEntity> findAll(Pageable pageable);
 
     @Query(
             value = "SELECT * FROM movies m WHERE m.genre LIKE CONCAT('%',:genre,'%')",
             nativeQuery = true)
-    public List<MoviesEntity> findMoviesByGenre(@Param("genre") String genre);
+    Page<MoviesEntity> findMoviesByGenre(@Param("genre") String genre, Pageable pageable);
 
     @Query(
             value = "SELECT * FROM movies m WHERE m.directors LIKE CONCAT('%',:director,'%')",
             nativeQuery = true)
-    public List<MoviesEntity> findMoviesByDirector(@Param("director") String director);
+    Page<MoviesEntity> findMoviesByDirector(@Param("director") String director, Pageable pageable);
 
     @Query(
             value = "SELECT * FROM movies m WHERE m.title LIKE CONCAT('%',:title,'%')",
             nativeQuery = true)
-    public List<MoviesEntity> findMoviesByTitle(@Param("title") String title);
+    Page<MoviesEntity> findMoviesByTitle(@Param("title") String title, Pageable pageable);
 
 }
 
