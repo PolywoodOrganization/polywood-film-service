@@ -67,12 +67,15 @@ public class MovieController {
         return Objects.requireNonNull(movies).getContent();
     }
     
-    @RequestMapping(value = "/maxPage", method = GET)
-    public int getAllMoviesPages(@RequestParam("size") Optional<Integer> size) {
-        Pageable pageable = PageRequest.of(0, size.orElse(Integer.MAX_VALUE));
+    @RequestMapping(value = "/maxPage/{size}", method = GET)
+    public int getAllMoviesPages(@PathVariable("size") Integer size, @RequestParam("search") Optional<String> search) {
+        Pageable pageable = PageRequest.of(0, size);
         Page<MoviesEntity> movies = null;
         try {
-            movies = anEntityMovieRepository.findAll(pageable);
+            if (search.isPresent())
+                movies = anEntityMovieRepository.findMoviesByTitle(search.get().replace("+"," "), pageable);
+            else
+                movies = anEntityMovieRepository.findAll(pageable);
         } catch (Exception e) {
             ResponseEntity.notFound().build();
         }
