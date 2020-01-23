@@ -34,6 +34,15 @@ public interface EntityMovieRepository extends PagingAndSortingRepository<Movies
             value = "SELECT * FROM movies m WHERE m.title LIKE CONCAT('%',:title,'%')",
             nativeQuery = true)
     Page<MoviesEntity> findMoviesByTitle(@Param("title") String title, Pageable pageable);
-
+    
+    @Query(
+            value = "SELECT * FROM movies m WHERE m.title LIKE CONCAT('%', :keywords,'%')" +
+                    "OR m.releaseyear LIKE CONCAT('%', :keywords, '%')" +
+                    "OR m.genre LIKE CONCAT('%', :keywords, '%')" +
+                    "OR m.writers LIKE CONCAT('%', :keywords, '%')" +
+                    "OR m.actors LIKE CONCAT('%', :keywords, '%')" +
+                    "OR m.directors LIKE CONCAT('%', :keywords, '%')",
+            nativeQuery = true)
+    Page<MoviesEntity> findMoviesByKeywords(@Param("keywords") String keywords, Pageable pageable);
 }
 
