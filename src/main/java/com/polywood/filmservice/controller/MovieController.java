@@ -16,6 +16,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -177,5 +180,30 @@ public class MovieController {
 
         return actorsEntities;
     }
-
+    
+    @GetMapping("/search/{keywords}")
+    public List<MoviesEntity> getMoviesByKeywords(@PathVariable("keywords") String keywords,
+                                                  @RequestParam("page") Optional<Integer> page,
+                                                  @RequestParam("size") Optional<Integer> size,
+                                                  @RequestParam("sort") Optional<String> sort) {
+        try {
+            keywords = URLDecoder.decode(keywords, StandardCharsets.UTF_8.name());
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+    
+        Pageable pageable = PageRequest.of(page.orElse(0), size.orElse(Integer.MAX_VALUE), Sort.by(sort.orElse("title")));
+    
+        Page<MoviesEntity> movies = null;
+        try {
+            movies = anEntityMovieRepository.findMoviesByKeywords(keywords, pageable);
+        } catch (Exception e) {
+            ResponseEntity.notFound().build();
+        }
+    
+        if(movies == null)
+            ResponseEntity.notFound().build();
+    
+        return Objects.requireNonNull(movies).getContent();
+    }
 }
